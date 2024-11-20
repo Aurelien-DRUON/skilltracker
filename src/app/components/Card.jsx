@@ -1,8 +1,10 @@
-export default function Card() {
+import Text from "./Text";
+
+export default function Card({ title, children }) {
   return (
-    <div className="bg-white shadow-md rounded-lg p-6">
-      <h1 className="text-xl font-semibold">Card</h1>
-      <p className="text-gray-500">This is a card component.</p>
+    <div className="bg-green-100 border border-green-300 rounded-lg shadow-lg p-6 max-w-md mx-auto">
+      <Text variant="title">{title}</Text>
+      {children}
     </div>
   );
 }
