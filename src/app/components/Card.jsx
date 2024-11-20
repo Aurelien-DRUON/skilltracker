@@ -1,3 +1,5 @@
+"use client";
+
 import Text from "./Text";
 
 export default function Card({ title, children }) {
