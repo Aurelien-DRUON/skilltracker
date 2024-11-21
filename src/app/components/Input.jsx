@@ -1,19 +1,11 @@
-"use client";
-
-export default function Input({ label, type, placeholder, value, onChange }) {
+export default function Input({ type, placeholder, value, onChange }) {
   return (
-    <div className="flex flex-col mb-4">
-      <label htmlFor={label} className="text-green-900">
-        {label}
-      </label>
-      <input
-        id={label}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        className="border border-green-300 rounded-lg p-2"
-      />
-    </div>
+    <input
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      className="bg-green-100 border border-green-300 text-gray-700 py-2 px-3 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-full mb-4"
+    />
   );
 }
