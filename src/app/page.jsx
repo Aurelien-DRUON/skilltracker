@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import Button from "./components/Button";
 import Card from "./components/Card";
-import ButtonHome from "./components/ButtonHome";
 
 export default function Home() {
   const router = useRouter();
@@ -20,7 +19,6 @@ export default function Home() {
 
   return (
     <>
-      <ButtonHome onClick={handleClickHome}>Home</ButtonHome>
       <Card title="SkillTracker">
         <div className=" flex flex-col gap-4">
           <p className="text-black m-2">

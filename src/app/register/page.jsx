@@ -3,16 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import Button from "../components/Button";
-import ButtonHome from "../components/ButtonHome";
 import Card from "../components/Card";
 import Input from "../components/Input";
 import usePostUser from "../api/login";
 
 export default function Register() {
   const router = useRouter();
-  const handleClickHome = useCallback(() => {
-    router.push("/");
-  }, []);
 
   const handleSubmit = useCallback(async (event) => {
     event.preventDefault();
@@ -32,7 +28,6 @@ export default function Register() {
 
   return (
     <>
-      <ButtonHome onClick={handleClickHome}>Home</ButtonHome>
       <Card title="Create Account">
         <div className=" flex flex-col gap-4">
           <form name="" onSubmit={handleSubmit}>
