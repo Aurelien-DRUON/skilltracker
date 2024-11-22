@@ -1,13 +1,22 @@
-export default function Input({ type, placeholder, value, onChange, label }) {
+export default function Input({
+  type,
+  placeholder,
+  value,
+  onChange,
+  label,
+  id,
+  name,
+}) {
   return (
     <>
       {label && (
-        <label htmlFor={label} className="text-green-500">
+        <label htmlFor={name} className="text-green-500">
           {label}
         </label>
       )}
       <input
-        id={label || ""}
+        id={id}
+        name={name}
         type={type}
         placeholder={placeholder}
         value={value}

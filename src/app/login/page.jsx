@@ -27,8 +27,8 @@ export default function Login() {
               Mot de passe
             </label>
             <Input type="password" id="password" name="password" />
+            <Button type="submit">Log in</Button>
           </form>
-          <Button onClick={handleClickLogin}>Log in</Button>
         </div>
       </Card>
     </>

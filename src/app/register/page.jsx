@@ -18,7 +18,16 @@ export default function Register() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    console.log(formData);
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    try {
+      await usePostUser({ name, email, password });
+      router.push("/login");
+    } catch {
+      alert("Error");
+    }
   }, []);
 
   return (
@@ -26,10 +35,15 @@ export default function Register() {
       <ButtonHome onClick={handleClickHome}>Home</ButtonHome>
       <Card title="Create Account">
         <div className=" flex flex-col gap-4">
-          <form onSubmit={handleSubmit}>
-            <Input label="Identifiant" type="text" id="name" />
-            <Input label="Email" type="email" id="email" />
-            <Input label="Mot de Passe" type="password" id="password" />
+          <form name="" onSubmit={handleSubmit}>
+            <Input label="Identifiant" type="text" id="name" name="name" />
+            <Input label="Email" type="email" id="email" name="email" />
+            <Input
+              label="Mot de Passe"
+              type="password"
+              id="password"
+              name="password"
+            />
             <Button type="submit">Register</Button>
           </form>
         </div>
