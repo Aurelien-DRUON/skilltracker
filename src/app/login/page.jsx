@@ -12,9 +12,6 @@ export default function Login() {
   const handleClickHome = useCallback(() => {
     router.push("/");
   }, []);
-  const handleClickLogin = useCallback(() => {
-    // Code de soumission du formulaire
-  }, []);
 
   return (
     <>
@@ -25,7 +22,7 @@ export default function Login() {
             <label htmlFor="text" className="text-green-500">
               Identifiant
             </label>
-            <Input type="text" id="identifiant" name="identifiant" />
+            <Input type="text" id="name" name="name" />
             <label htmlFor="password" className="text-green-500">
               Mot de passe
             </label>
