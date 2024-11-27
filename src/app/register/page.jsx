@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import Input from "../components/Input";
-import usePostUser from "../api/login";
+import { usePostUser } from "../api/login";
 import ButtonHome from "../components/ButtonHome";
 
 export default function Register() {
