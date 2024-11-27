@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import Input from "../components/Input";
+import ButtonHome from "../components/ButtonHome";
 
 export default function Login() {
   const handleSubmit = useCallback(async (event) => {
@@ -31,6 +32,7 @@ export default function Login() {
             <Button type="submit">Log in</Button>
           </form>
         </div>
+        <ButtonHome />
       </Card>
     </>
   );

@@ -6,6 +6,7 @@ import Button from "../components/Button";
 import Card from "../components/Card";
 import Input from "../components/Input";
 import usePostUser from "../api/login";
+import ButtonHome from "../components/ButtonHome";
 
 export default function Register() {
   const router = useRouter();
@@ -42,6 +43,7 @@ export default function Register() {
             <Button type="submit">Register</Button>
           </form>
         </div>
+        <ButtonHome />
       </Card>
     </>
   );
