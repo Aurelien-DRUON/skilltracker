@@ -6,7 +6,7 @@ import Card from "../components/Card";
 import Input from "../components/Input";
 import ButtonHome from "../components/ButtonHome";
 import { useGetUser } from "../api/login";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const router = useRouter();
