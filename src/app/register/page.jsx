@@ -20,7 +20,7 @@ export default function Register() {
 
     try {
       await usePostUser({ name, email, password });
-      router.push("/login");
+      router.push("/");
     } catch {
       alert("Error");
     }
