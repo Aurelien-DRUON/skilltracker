@@ -1,21 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import SidebarButton from "./SidebarButton";
-import Separator from "./Séparator";
-import Button from "./Button";
+import Separator from "./Separator";
 
 export default function Sidebar() {
   const router = useRouter();
+  const params = useSearchParams();
 
   const handleClickObjectives = useCallback(() => {
-    router.push("/dashboard/objectives");
-  }, [router]);
-
+    router.push("/dashboard/objectives?user=" + params.get("user"));
+  }, []);
   const handleClickSkills = useCallback(() => {
-    router.push("/dashboard/skills");
-  }, [router]);
+    router.push("/dashboard/skills?user=" + params.get("user"));
+  }, []);
 
   const handleLogout = useCallback(() => {
     router.push("/login");

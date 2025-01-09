@@ -4,8 +4,15 @@ import { useState, useEffect } from "react";
 import Button from "../../components/Button";
 import { FaTrash } from "react-icons/fa";
 import Sidebar from "@/app/components/Sidebar";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useGetUserById, usePostObjective } from "@/app/api/dashboard";
+import Input from "@/app/components/Input";
 
 export default function Objectives() {
+  const router = useRouter();
+  const params = useSearchParams();
+
+  const [user, setUser] = useState(null);
   const [objectives, setObjectives] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [newObjective, setNewObjective] = useState({
@@ -15,23 +22,42 @@ export default function Objectives() {
   });
 
   useEffect(() => {
-    setObjectives([
-      {
-        id: 1,
-        title: "Objectif 1",
-        createdAt: "2024-11-01",
-        timeGoal: "2024-12-01",
-      },
-      {
-        id: 2,
-        title: "Objectif 2",
-        createdAt: "2024-11-10",
-        timeGoal: "2024-12-10",
-      },
-    ]);
+    async function fetchUser() {
+      if (!params.get("user")) {
+        router.push("/");
+      } else {
+        const user = await useGetUserById({ id: params.get("user") });
+        setUser(user);
+      }
+    }
+    fetchUser();
+  }, [params, router]);
+
+  useEffect(() => {
+    async function fetchObjectives() {
+      if (user) {
+        const objectives = await useGetUserObjectives({ userId: user.id });
+        setObjectives(objectives);
+      }
+    }
+    fetchObjectives();
   }, []);
 
-  const handleAddObjective = () => {};
+  const handleAddObjective = async (e) => {
+    e.preventDefault();
+    const objective = await usePostObjective({
+      userId: user.id,
+      title: newObjective.title,
+      timeGoal: newObjective.timeGoal,
+    });
+    setObjectives([...objectives, objective]);
+    setNewObjective({
+      title: "",
+      createdAt: "",
+      timeGoal: "",
+    });
+    setShowForm(false);
+  };
 
   const handleDeleteObjective = () => {};
 
@@ -44,36 +70,10 @@ export default function Objectives() {
             <h2 className="text-2xl font-bold mb-4">Add a New Objective</h2>
             <form onSubmit={handleAddObjective}>
               <div className="mb-4">
-                <label className="block text-lg font-medium mb-2">Title</label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-lg"
-                  value={newObjective.title}
-                  onChange={(e) =>
-                    setNewObjective({
-                      ...newObjective,
-                      title: e.target.value,
-                    })
-                  }
-                  required
-                />
+                <Input label="Titre" type="text" id="title" name="title" />
               </div>
               <div className="mb-4">
-                <label className="block text-lg font-medium mb-2">
-                  Date butoire
-                </label>
-                <input
-                  type="date"
-                  className="w-full p-2 border rounded-lg"
-                  value={newObjective.timeGoal}
-                  onChange={(e) =>
-                    setNewObjective({
-                      ...newObjective,
-                      timeGoal: e.target.value,
-                    })
-                  }
-                  required
-                />
+                <Input label="Date butoire" type="date" id="date" name="date" />
               </div>
               <Button>Ajouter l'objectif</Button>
               <button

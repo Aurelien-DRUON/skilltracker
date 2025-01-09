@@ -11,21 +11,24 @@ import ButtonHome from "../components/ButtonHome";
 export default function Register() {
   const router = useRouter();
 
-  const handleSubmit = useCallback(async (event) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    async (event) => {
+      event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-    const name = formData.get("name");
-    const email = formData.get("email");
-    const password = formData.get("password");
+      const formData = new FormData(event.currentTarget);
+      const name = formData.get("name");
+      const email = formData.get("email");
+      const password = formData.get("password");
 
-    try {
-      await usePostUser({ name, email, password });
-      router.push("/");
-    } catch {
-      alert("Error");
-    }
-  }, []);
+      try {
+        await usePostUser({ name, email, password });
+        router.push("/");
+      } catch {
+        alert("Error");
+      }
+    },
+    [usePostUser, router]
+  );
 
   return (
     <>
