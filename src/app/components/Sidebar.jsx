@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import SidebarButton from "./SidebarButton";
 import Separator from "./Separator";
+import Button from "./Button";
 
 export default function Sidebar() {
   const router = useRouter();
