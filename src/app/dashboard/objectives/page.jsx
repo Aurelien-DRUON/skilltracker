@@ -1,79 +1,79 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Button from "../../components/Button";
 import { FaTrash } from "react-icons/fa";
 import Sidebar from "@/app/components/Sidebar";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  useDeleteObjective,
+  useGetObjectivesByUserId,
+  useGetUserById,
+  usePostObjective,
+} from "@/app/api/dashboard";
+import Input from "@/app/components/Input";
 
 export default function Objectives() {
+  const router = useRouter();
+  const params = useSearchParams();
+
+  const [user, setUser] = useState({});
   const [objectives, setObjectives] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [newObjective, setNewObjective] = useState({
-    title: "",
-    createdAt: "",
-    timeGoal: "",
-  });
 
   useEffect(() => {
-    setObjectives([
-      {
-        id: 1,
-        title: "Objectif 1",
-        createdAt: "2024-11-01",
-        timeGoal: "2024-12-01",
-      },
-      {
-        id: 2,
-        title: "Objectif 2",
-        createdAt: "2024-11-10",
-        timeGoal: "2024-12-10",
-      },
-    ]);
+    async function fetchUser() {
+      if (!params.get("user")) {
+        router.push("/");
+      } else {
+        const user = await useGetUserById({ id: params.get("user") });
+        setUser(user);
+      }
+    }
+    fetchUser();
+  }, [params, router]);
+
+  const fetchObjectives = async () => {
+    if (user) {
+      const objectives = await useGetObjectivesByUserId({ userId: user.id });
+      setObjectives(objectives);
+    }
+  };
+
+  useEffect(() => {
+    fetchObjectives();
   }, []);
 
-  const handleAddObjective = () => {};
+  const handleAddObjective = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const objective = await usePostObjective({
+      userId: user.id,
+      title: formData.get("title"),
+      timeGoal: new Date(formData.get("date")).toISOString(),
+    });
+    setObjectives([...objectives, objective]);
+    setShowForm(false);
+  };
 
-  const handleDeleteObjective = () => {};
+  const handleDeleteObjective = async (id) => {
+    await useDeleteObjective({ id });
+    fetchObjectives();
+  };
 
   return (
     <div className="flex">
-      <Sidebar className="w-1/4" />
+      <Sidebar className="w-1/4" user={user.name} />
       <div className="w-3/4 px-10 py-6">
         {showForm ? (
           <div>
             <h2 className="text-2xl font-bold mb-4">Add a New Objective</h2>
             <form onSubmit={handleAddObjective}>
               <div className="mb-4">
-                <label className="block text-lg font-medium mb-2">Title</label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-lg"
-                  value={newObjective.title}
-                  onChange={(e) =>
-                    setNewObjective({
-                      ...newObjective,
-                      title: e.target.value,
-                    })
-                  }
-                  required
-                />
+                <Input label="Titre" type="text" id="title" name="title" />
               </div>
               <div className="mb-4">
-                <label className="block text-lg font-medium mb-2">
-                  Date butoire
-                </label>
-                <input
-                  type="date"
-                  className="w-full p-2 border rounded-lg"
-                  value={newObjective.timeGoal}
-                  onChange={(e) =>
-                    setNewObjective({
-                      ...newObjective,
-                      timeGoal: e.target.value,
-                    })
-                  }
-                  required
-                />
+                <Input label="Date butoire" type="date" id="date" name="date" />
               </div>
               <Button>Ajouter l'objectif</Button>
               <button
@@ -108,12 +108,12 @@ export default function Objectives() {
                       {objective.title}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {objective.createdAt}
+                      {new Date(objective.createdAt).toLocaleDateString()}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {objective.timeGoal}
+                      {new Date(objective.timeGoal).toLocaleDateString()}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2 flex justify-center items-center">
+                    <td className="px-4 py-2 flex justify-center items-center">
                       <button
                         onClick={() => handleDeleteObjective(objective.id)}
                         className="w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-md hover:bg-red-600"

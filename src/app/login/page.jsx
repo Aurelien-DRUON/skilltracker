@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import Card from "../components/Card";
 import Input from "../components/Input";
 import ButtonHome from "../components/ButtonHome";
-import { useGetUser } from "../api/login";
+import { useGetUserByLogin } from "../api/login";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -19,8 +19,10 @@ export default function Login() {
     const password = formData.get("password");
 
     try {
-      const user = await useGetUser({ email, password });
-      user ? router.push("/dashboard?user=" + user.id) : alert("Error");
+      const user = await useGetUserByLogin({ email, password });
+      user
+        ? router.push("/dashboard/objectives?user=" + user.id)
+        : alert("User not found");
     } catch {
       alert("Error");
     }
