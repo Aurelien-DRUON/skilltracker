@@ -10,7 +10,9 @@ export async function usePostUser({ name, email, password }) {
       name,
       email,
       password,
-      skills: [],
+      skills: {
+        create: [],
+      },
     },
   });
   return user;

@@ -22,7 +22,7 @@ export default function Login() {
       const user = await useGetUserByLogin({ email, password });
       user
         ? router.push("/dashboard/objectives?user=" + user.id)
-        : alert("Error");
+        : alert("User not found");
     } catch {
       alert("Error");
     }

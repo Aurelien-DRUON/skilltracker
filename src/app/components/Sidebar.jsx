@@ -6,7 +6,7 @@ import SidebarButton from "./SidebarButton";
 import Separator from "./Separator";
 import Button from "./Button";
 
-export default function Sidebar() {
+export default function Sidebar({ user }) {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -24,7 +24,7 @@ export default function Sidebar() {
   return (
     <div className="h-screen w-64 bg-green-800 p-10 flex flex-col gap-4 relative">
       <h1 className="w-full py-2 text-center text-white font-bold text-lg">
-        IDENTIFIANT
+        {user}
       </h1>
       <Separator />
 

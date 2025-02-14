@@ -21,8 +21,8 @@ export default function Register() {
       const password = formData.get("password");
 
       try {
-        await usePostUser({ name, email, password });
-        router.push("/");
+        const user = await usePostUser({ name, email, password });
+        router.push("/dashboard/objectives?user=" + user.id);
       } catch {
         alert("Error");
       }

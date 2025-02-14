@@ -1,25 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Button from "../../components/Button";
 import { FaTrash } from "react-icons/fa";
 import Sidebar from "@/app/components/Sidebar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useGetUserById, usePostObjective } from "@/app/api/dashboard";
+import {
+  useDeleteObjective,
+  useGetObjectivesByUserId,
+  useGetUserById,
+  usePostObjective,
+} from "@/app/api/dashboard";
 import Input from "@/app/components/Input";
 
 export default function Objectives() {
   const router = useRouter();
   const params = useSearchParams();
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
   const [objectives, setObjectives] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [newObjective, setNewObjective] = useState({
-    title: "",
-    createdAt: "",
-    timeGoal: "",
-  });
 
   useEffect(() => {
     async function fetchUser() {
@@ -33,37 +33,37 @@ export default function Objectives() {
     fetchUser();
   }, [params, router]);
 
-  useEffect(() => {
-    async function fetchObjectives() {
-      if (user) {
-        const objectives = await useGetUserObjectives({ userId: user.id });
-        setObjectives(objectives);
-      }
+  const fetchObjectives = async () => {
+    if (user) {
+      const objectives = await useGetObjectivesByUserId({ userId: user.id });
+      setObjectives(objectives);
     }
+  };
+
+  useEffect(() => {
     fetchObjectives();
   }, []);
 
   const handleAddObjective = async (e) => {
     e.preventDefault();
+    const formData = new FormData(e.target);
     const objective = await usePostObjective({
       userId: user.id,
-      title: newObjective.title,
-      timeGoal: newObjective.timeGoal,
+      title: formData.get("title"),
+      timeGoal: new Date(formData.get("date")).toISOString(),
     });
     setObjectives([...objectives, objective]);
-    setNewObjective({
-      title: "",
-      createdAt: "",
-      timeGoal: "",
-    });
     setShowForm(false);
   };
 
-  const handleDeleteObjective = () => {};
+  const handleDeleteObjective = async (id) => {
+    await useDeleteObjective({ id });
+    fetchObjectives();
+  };
 
   return (
     <div className="flex">
-      <Sidebar className="w-1/4" />
+      <Sidebar className="w-1/4" user={user.name} />
       <div className="w-3/4 px-10 py-6">
         {showForm ? (
           <div>
@@ -108,12 +108,12 @@ export default function Objectives() {
                       {objective.title}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {objective.createdAt}
+                      {new Date(objective.createdAt).toLocaleDateString()}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {objective.timeGoal}
+                      {new Date(objective.timeGoal).toLocaleDateString()}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2 flex justify-center items-center">
+                    <td className="px-4 py-2 flex justify-center items-center">
                       <button
                         onClick={() => handleDeleteObjective(objective.id)}
                         className="w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-md hover:bg-red-600"

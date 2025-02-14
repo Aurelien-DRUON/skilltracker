@@ -19,6 +19,7 @@ model User {
   name      String
   password  String
   skills    Skill[]
+  objective Objective[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -27,20 +28,18 @@ model Skill {
   id          Int       @id @default(autoincrement())
   name        String    @unique
   progression Int
-  objective   Objective @relation(fields: [objectiveId], references: [id])
+  userId      Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  User        User?     @relation(fields: [userId], references: [id])
-  userId      Int?
-  objectiveId Int
+  User        User     @relation(fields: [userId], references: [id])
 }
 
 model Objective {
   id        Int      @id @default(autoincrement())
-  skillId   Int
-  timeGoal  Int?
+  title     String
+  timeGoal  DateTime
+  userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  Skill Skill[]
+  User      User    @relation(fields: [userId], references: [id])
 }
